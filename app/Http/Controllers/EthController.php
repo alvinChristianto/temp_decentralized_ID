@@ -9,277 +9,56 @@ use Web3\RequestManagers\HttpRequestManager;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\FORCE_IP_RESOLVE;
+use GuzzleHttp\DECODE_CONTENT;
+use GuzzleHttp\CONNECT_TIMEOUT;
+use GuzzleHttp\READ_TIMEOUT;
+use GuzzleHttp\TIMEOUT;
 
 //$contract = new Contract('https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161/', $contractABI); //default metamask
 //$contract = new Contract('https://ropsten.infura.io/v3/a3491ed6ac7a4c3a87a914bbe5a1bbdd/', $contractABI); //default infura
 
-$contractABI = '[
-  {
-    "inputs": [],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "inputs": [],
-    "name": "DigitalIDCounter",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "dictDigitalIDData",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "dictLogData",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "logIDCounter",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_address_sender",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "_tokenURI",
-        "type": "string"
-      }
-    ],
-    "name": "saveLogs",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_address_sender",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "_tokenURI",
-        "type": "string"
-      }
-    ],
-    "name": "saveDigitalIDs",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_address",
-        "type": "address"
-      }
-    ],
-    "name": "showLogsByOwner",
-    "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_address",
-        "type": "address"
-      }
-    ],
-    "name": "showDigitalIDByOwner",
-    "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_index",
-        "type": "uint256"
-      }
-    ],
-    "name": "showIPFSLogs",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_index",
-        "type": "uint256"
-      }
-    ],
-    "name": "showIPFSDID",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "ownerOfLog",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "ownerOfDigitalID",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  }
-//]';
 
 class EthController extends Controller{
+  public function testQuicknode() {
+      $timeout = 30;
+      //$web3 = new Web3(new HttpProvider(new HttpRequestManager("http://127.0.0.1:7545/",$timeout)));
+      //$web3 = new Web3(new HttpProvider(new HttpRequestManager("https://ropsten.infura.io/v3/a3491ed6ac7a4c3a87a914bbe5a1bbdd",$timeout)));  //infura direct
+      $web3 = new Web3(new HttpProvider(new HttpRequestManager("https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",$timeout)));  // metamask
+      //$web3 = new Web3(new HttpProvider(new HttpRequestManager("https://broken-proud-brook.ropsten.quiknode.pro/71ac710aab3784ec3bb5997b0e0c5ff640fc3c79/",$timeout)));
+
+      print_r($web3);
+
+      $eth = $web3->eth;
+      $eth->eth_getBalance(function ($err, $data) {
+          echo "Latest block number is: ". $data . " \n";
+      });
+
+
+      $contractAddress = "0x22835508BadAA6D26A11327bFcB528d791eAEC5b";
+      $fromAccount = "0x9cdc1E3F896dD416660b7359A0bC81EAE5e1b93a"; //accounts[0] -
+
+      $eth->at($contractAddress)->call("showLogsByOwner", $fromAccount, function($err,$data) {
+        if ($err !== null) {
+          echo 'Error: ' . $err->getMessage();
+          return;
+        }
+        echo 'showLogsByOwner : menampilkan id logs berdasar address user :<br>';
+        foreach ($data as $dt) {
+            foreach($dt as $t) {
+              echo $t;
+              echo "<br>";
+            }
+        }
+
+      });
+
+    }
+
   public function DecetralizeID(){
 
+    $timeout = 10;
     $contractABI = '[
       {
         "inputs": [],
@@ -545,10 +324,31 @@ class EthController extends Controller{
     ]';
 
     //$contract = new Contract('http://127.0.0.1:7545/', $contractABI);
-    $contract = new Contract('https://ropsten.infura.io/v3/a3491ed6ac7a4c3a87a914bbe5a1bbdd', $contractABI); //default metamask
+    //$contract = new Contract('https://ropsten.infura.io/v3/a3491ed6ac7a4c3a87a914bbe5a1bbdd', $contractABI); //default metamask
+    //$contract = new Contract(new HttpProvider(new HttpRequestManager('https://ropsten.infura.io/v3/a3491ed6ac7a4c3a87a914bbe5a1bbdd', ),$contractABI)); //default metamask
+    $contract = new Contract(new HttpProvider(new HttpRequestManager('https://ropsten.infura.io/v3/a3491ed6ac7a4c3a87a914bbe5a1bbdd', $timeout)) , $contractABI);
+
 
     $contractAddress = "0x22835508BadAA6D26A11327bFcB528d791eAEC5b";
     $fromAccount = "0x9cdc1E3F896dD416660b7359A0bC81EAE5e1b93a"; //accounts[0] -
+
+
+
+    //SAVELOGS
+    $contract->at($contractAddress)->send("saveLogs", $fromAccount, "string_ipfs_url", [
+      'from' => $fromAccount,
+      'gas' => '0x200b20' //
+    ], function($err,$result){
+      if ($err !== null) {
+        throw $err;
+      }
+
+      if ($result) {
+        echo "Do saveLogs for user : " . $result . "\n<br>";
+      }
+
+    });
+    /*
 
     //SHOWLOGSBYOWNER
     $contract->at($contractAddress)->call("showLogsByOwner", $fromAccount, function($err,$data) {
@@ -565,22 +365,6 @@ class EthController extends Controller{
       }
 
     });
-
-    //SAVELOGS
-    $contract->at($contractAddress)->send("saveLogs", $fromAccount, "string_ipfs_url", [
-      'from' => $fromAccount,
-      'gas' => '0x200b20' //
-    ], function($err,$result){
-      if ($err !== null) {
-        throw $err;
-      }
-
-      if ($result) {
-        echo "Do saveLogs for user : " . $result . "\n<br>";
-      }
-
-    });
-
 
     //SHOWIPFSLOGS
     $contract->at($contractAddress)->call("showIPFSLogs", 101, function($err,$data) {
@@ -605,7 +389,7 @@ class EthController extends Controller{
       echo "<br>";
 
     });
-
+*/
 
   }
 
