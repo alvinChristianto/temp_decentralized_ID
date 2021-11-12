@@ -18,4 +18,5 @@ Route::get('/', function () {
 });
 
 Route::get('/cek-log/{id}','App\Http\Controllers\EthController@tokenURI')->name('tokenURI');    //bisa ditambahkan parameter Id log
-Route::get('log-berdasar-address','App\Http\Controllers\EthController@showLogsByOwner');
+Route::get('/log-berdasar-address','App\Http\Controllers\EthController@showLogsByOwner');
+Route::get('/save-logs','App\Http\Controllers\EthController@saveLogsToRopsten');

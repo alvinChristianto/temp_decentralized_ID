@@ -48,16 +48,25 @@
                     <a href="/cek-log/100"> link</a>
                   </td>
                 </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>showLogsByOwner</td>
+                  <td>call fungsi showLogsByOwner</td>
+                  <td>address account</td>
+                  <td>
+                    <a href="/log-berdasar-address"> link</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>saveLogs</td>
+                  <td>call fungsi saveLogs(getData)</td>
+                  <td></td>
+                  <td>
+                    <a href="/save-logs"> link</a>
+                  </td>
+                </tr>
 
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>showLogsByOwner</td>
-                    <td>call fungsi showLogsByOwner</td>
-                    <td>address account</td>
-                    <td>
-                      <a href="/log-berdasar-address"> link</a>
-                    </td>
-                  </tr>
               </tbody>
             </table>
           </div>
