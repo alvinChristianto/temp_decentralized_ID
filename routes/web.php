@@ -16,8 +16,6 @@ use App\Http\Controllers\EthController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('eth','App\Http\Controllers\EthController@frontpage');
-Route::get('testabi','App\Http\Controllers\EthController@testAbiFunction');
-Route::get('echo ','App\Http\Controllers\EthController@echoLog');
-Route::get('stackEx ','App\Http\Controllers\EthController@stackEx');
-Route::get('did ','App\Http\Controllers\EthController@DecetralizeID');
+
+Route::get('/cek-log/{id}','App\Http\Controllers\EthController@tokenURI')->name('tokenURI');    //bisa ditambahkan parameter Id log
+Route::get('log-berdasar-address','App\Http\Controllers\EthController@showLogsByOwner');
